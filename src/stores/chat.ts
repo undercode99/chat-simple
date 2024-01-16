@@ -33,24 +33,34 @@ export const useChatRegisterStore = defineStore('userChatRegister', () => {
 export const useChatStore = defineStore('chatMessages', () => {
   const messages = ref<UserMessages[]>([])
   const currentPage = ref<number>(1)
+  const loadingLoadMore = ref<boolean>(false)
+  const noMoreData = ref<boolean>(false)
 
-  function sendMessage(message: UserMessages) {
+  function sendMessage(message: UserMessages): void {
     saveMessageToStorage(message)
     messages.value.push(message)
   }
 
   // paginate data
-  function loadMoreMessages() {
+  async function loadMoreMessages(): Promise<void> {
+    // check if no more data
+    if (noMoreData.value) {
+      return
+    }
+    // just load more data after 1 second to show loading
+    loadingLoadMore.value = true
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
     const numPages = currentPage.value + 1
     const results = paginate(fetchMessageFromStorage(), numPages, TOTAL_PAGES)
     if (results.length === 0) {
+      noMoreData.value = true
+      loadingLoadMore.value = false
       return
     }
-    messages.value = [
-      ...results,
-      ...messages.value
-    ]
+    messages.value = [...results, ...messages.value]
     currentPage.value = numPages
+    loadingLoadMore.value = false
   }
 
   // fetch initial data
@@ -69,6 +79,8 @@ export const useChatStore = defineStore('chatMessages', () => {
 
   return {
     messages,
+    loadingLoadMore,
+    noMoreData,
     sendMessage,
     loadMoreMessages,
     loadInitialMessages,
