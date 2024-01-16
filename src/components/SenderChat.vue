@@ -20,7 +20,10 @@ const onSendMessage = () => {
       placeholder="Type your message…"
       v-model="message"
     />
-    <button class="ml-2 bg-primary hover:bg-blue-500 text-white font-bold py-2 px-4 rounded">
+    <button
+      class="ml-2 bg-primary hover:bg-blue-500 text-white font-bold py-2 px-4 rounded"
+      type="submit"
+    >
       <svg
         stroke="currentColor"
         fill="currentColor"
