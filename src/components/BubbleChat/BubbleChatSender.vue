@@ -19,8 +19,8 @@ const props = defineProps({
     </div>
     <!-- <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div> -->
     <img
-      class="h-10 w-10 rounded-full"
-      src="https://api.dicebear.com/7.x/fun-emoji/svg"
+      class="h-10 w-10"
+      src="https://api.dicebear.com/7.x/fun-emoji/svg?backgroundType=gradientLinear&randomizeIds=true&radius=10"
       alt="avatar"
     />
   </div>
