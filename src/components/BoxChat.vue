@@ -18,5 +18,5 @@ const props = defineProps({
     :time="props.time"
   />
 
-  <BubbleChatSender v-else :name="props.name" :message="props.message" :time="props.time" />
+  <BubbleChatSender v-else :message="props.message" :time="props.time" />
 </template>

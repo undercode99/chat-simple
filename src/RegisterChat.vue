@@ -5,7 +5,6 @@ import { useChatRegisterStore } from './stores/chat'
 
 const chatRegisterStore = useChatRegisterStore()
 const fullName = ref('')
-
 </script>
 
 <template>
@@ -14,7 +13,8 @@ const fullName = ref('')
   >
     <HeaderChat header="Register User" />
     <div class="p-8 text-center my-auto">
-      <h2 class="text-2xl font-semibold leading-7 text-gray-900">Welcome to Chat App</h2>
+      <img class="mx-auto h-48 mb-4 w-auto" src="./assets/logo.png" alt="Your Company" />
+      <h2 class="text-2xl font-semibold leading-7 text-gray-800">Welcome to Chat App</h2>
       <p class="mt-1 leading-6 text-gray-600">Please register first to enter the chat room</p>
       <form
         class="mt-6 flex flex-col gap-y-6"

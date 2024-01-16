@@ -7,7 +7,7 @@ const props = defineProps({
 <template>
   <header class="header-container md:rounded-t-lg px-6 py-4 flex flex-row justify-between">
     <div>
-      <h1 class="text-2xl font-medium text-white">Hi, {{ props.name }} :p</h1>
+      <h1 class="text-2xl font-medium text-white">Hi, {{ props.name }} 👋</h1>
       <p class="text-sm font-norma mt-1 text-white leading-5">On Chat Room</p>
     </div>
     <button
