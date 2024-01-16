@@ -88,10 +88,10 @@ describe('useChatStore', () => {
     useChat.loadInitialMessages()
     expect(useChat.messages).toHaveLength(0)
   })
-  it('Load more messages paginate', () => {
+  it('Load more messages paginate', async () => {
     const useChat = useChatStore()
     const data: UserMessages[] = []
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 60; i++) {
       data.push({
         message: 'Hello',
         name: 'Jhon',
@@ -99,6 +99,16 @@ describe('useChatStore', () => {
         userId: i.toString()
       })
     }
-    useChat.loadMoreMessages()
+
+    localStorage.setItem(KEY_NAME_LOCAL_STORAGE, JSON.stringify(data))
+
+    // load initial 25 messages
+    useChat.loadInitialMessages()
+    expect(useChat.messages).toHaveLength(25)
+
+    // load more 25 messages and append them expected to 50
+    await useChat.loadMoreMessages()
+    expect(useChat.messages).toHaveLength(50)
+
   })
 })
