@@ -1,19 +1,9 @@
 <script setup lang="ts">
-import { useCounterStore } from './stores/counter'
-const counter = useCounterStore()
-const increment = () => {
-  counter.increment()
-}
+import ChatApp from './ChatApp.vue'
 </script>
 
 <template>
-  <div class="text-red-500">
-    <p>Chat Simple</p>
-    <button
-      @click="increment"
-      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-    >
-      Increment +{{ counter.count }}
-    </button>
+  <div class="max-w-md w-full bg-white rounded-xl shadow-sm border md:mx-auto">
+    <ChatApp />
   </div>
 </template>
