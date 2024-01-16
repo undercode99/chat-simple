@@ -1,6 +1,6 @@
 import { type UserMessages } from './chat.type'
 
-const KEY_NAME_LOCAL_STORAGE = 'userMessages'
+export const KEY_NAME_LOCAL_STORAGE = 'userMessages'
 export const TOTAL_PAGES = 8
 
 
@@ -38,9 +38,9 @@ export const paginate = (data: UserMessages[], page: number, pageSize: number): 
 }
 
 // get new message from storage event
-export const getNewMessageFromStorage = (e: StorageEvent): UserMessages[] => {
-  const newMessages = JSON.parse(e.newValue!)
-  const oldMessages = JSON.parse(e.oldValue!)
+export const getNewMessageFromStorage = (newValue: string, oldValue: string): UserMessages[] => {
+  const newMessages = JSON.parse(newValue!)
+  const oldMessages = JSON.parse(oldValue!)
   const newMessageData = <UserMessages[]>newMessages.slice(oldMessages.length, newMessages.length)
   return newMessageData
 }

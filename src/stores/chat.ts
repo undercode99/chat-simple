@@ -10,7 +10,6 @@ import {
 } from './chat.storage'
 import { type UserMessages } from './chat.type'
 
-
 export const useChatRegisterStore = defineStore('userChatRegister', () => {
   const userFullName = ref<string>('')
   const userId = ref<string>('')
@@ -31,7 +30,7 @@ export const useChatRegisterStore = defineStore('userChatRegister', () => {
   return { userFullName, userId, setNewUser, userHasRegister, setLoggedUser }
 })
 
-export const useChatStore = defineStore('chat', () => {
+export const useChatStore = defineStore('chatMessages', () => {
   const messages = ref<UserMessages[]>([])
   const currentPage = ref<number>(1)
 
@@ -39,7 +38,6 @@ export const useChatStore = defineStore('chat', () => {
     saveMessageToStorage(message)
     messages.value.push(message)
   }
-
 
   // paginate data
   function loadMoreMessages() {
@@ -49,7 +47,7 @@ export const useChatStore = defineStore('chat', () => {
       return
     }
     messages.value = [
-      ...paginate(fetchMessageFromStorage(), numPages, TOTAL_PAGES),
+      ...results,
       ...messages.value
     ]
     currentPage.value = numPages
@@ -62,12 +60,18 @@ export const useChatStore = defineStore('chat', () => {
 
   // get new message from storage event
   function notifyNewMessage(stroageEvent: StorageEvent) {
-    const newMessages = getNewMessageFromStorage(stroageEvent)
+    const newMessages = getNewMessageFromStorage(stroageEvent.newValue!, stroageEvent.oldValue!)
     if (newMessages.length === 0) {
       return
     }
     messages.value = [...messages.value, ...newMessages]
   }
 
-  return { messages, sendMessage, loadMoreMessages, loadInitialMessages, notifyNewMessage }
+  return {
+    messages,
+    sendMessage,
+    loadMoreMessages,
+    loadInitialMessages,
+    notifyNewMessage
+  }
 })

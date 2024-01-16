@@ -12,10 +12,10 @@ export const makeid = (length: number): string  => {
 
 export const makeUserId = (name: string): string => {
   const nameToSnackCase = name
-    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .replace(/\s+/g, '-')
     .split(' ')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ')
+    .join(' ').toLowerCase()
 
   return nameToSnackCase + '_' + makeid(6)
 }
