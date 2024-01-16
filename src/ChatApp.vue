@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, nextTick } from 'vue'
 import HeaderRegisteredChat from './components/HeaderRegisteredChat.vue'
 import BoxChat from './components/BoxChat.vue'
 import SenderChat from './components/SenderChat.vue'
@@ -8,7 +8,22 @@ import { useChatRegisterStore, useChatStore } from './stores/chat'
 const chatRegisterStore = useChatRegisterStore()
 const chatStore = useChatStore()
 
-const chatMessages = ref<HTMLElement>()
+const chatMessagesEl = ref<HTMLElement>()
+const previousScrollHeightMinusScrollTop = ref(0)
+
+const recordScrollPosition = () => {
+  if (chatMessagesEl.value) {
+    previousScrollHeightMinusScrollTop.value =
+      chatMessagesEl.value.scrollHeight - chatMessagesEl.value.scrollTop
+  }
+}
+
+const restoreScrollPosition = () => {
+  if (chatMessagesEl.value) {
+    chatMessagesEl.value.scrollTop =
+      chatMessagesEl.value.scrollHeight - previousScrollHeightMinusScrollTop.value
+  }
+}
 
 const onSendMessage = (message: string) => {
   chatStore.sendMessage({
@@ -21,12 +36,12 @@ const onSendMessage = (message: string) => {
 }
 
 const scrollToBottom = () => {
-  setTimeout(() => {
-    if (chatMessages.value) {
-      chatMessages.value.scrollTop =
-        chatMessages.value.scrollHeight - chatMessages.value.clientHeight
+  nextTick(() => {
+    if (chatMessagesEl.value) {
+      chatMessagesEl.value.scrollTop =
+        chatMessagesEl.value.scrollHeight - chatMessagesEl.value.clientHeight
     }
-  }, 100)
+  })
 }
 
 const loadMessages = () => {
@@ -51,13 +66,19 @@ const eventNewMessage = (e: StorageEvent) => {
   audio.play()
 }
 
+const onLoadMoreMessages = async () => {
+  recordScrollPosition()
+  await chatStore.loadMoreMessages()
+  nextTick(() => restoreScrollPosition())
+}
+
 onMounted(() => {
   loadMessages()
   window.addEventListener('storage', eventNewMessage)
-  if (chatMessages.value) {
-    chatMessages.value.addEventListener('scroll', () => {
-      if (chatMessages.value?.scrollTop === 0) {
-        chatStore.loadMoreMessages()
+  if (chatMessagesEl.value) {
+    chatMessagesEl.value.addEventListener('scroll', async () => {
+      if (chatMessagesEl.value?.scrollTop === 0) {
+        onLoadMoreMessages()
       }
     })
   }
@@ -73,14 +94,16 @@ onMounted(() => {
       @onLogout="chatRegisterStore.setLoggedUser"
     />
     <div
-      ref="chatMessages"
-      class="flex flex-col flex-grow h-0 p-4 overflow-auto space-y-8"
+      ref="chatMessagesEl"
+      class="flex flex-col flex-grow h-0 p-4 overflow-auto space-y-4"
       id="chat-box"
     >
+      <div class="text-center p-1 text-gray-500 my-auto" v-if="chatStore.loadingLoadMore">
+        Loading more messages...
+      </div>
       <div class="text-center p-4 text-gray-500 my-auto" v-if="!chatStore.messages.length">
         No messages yet, start a conversation with your friends now!
       </div>
-
       <BoxChat
         v-else
         v-for="(message, index) in chatStore.messages"

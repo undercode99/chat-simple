@@ -1,7 +1,7 @@
 import { type UserMessages } from './chat.type'
 
 export const KEY_NAME_LOCAL_STORAGE = 'userMessages'
-export const TOTAL_PAGES = 8
+export const TOTAL_PAGES = 25
 
 
 // fetch message from storage
