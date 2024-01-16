@@ -39,8 +39,8 @@ export const paginate = (data: UserMessages[], page: number, pageSize: number): 
 
 // get new message from storage event
 export const getNewMessageFromStorage = (newValue: string, oldValue: string): UserMessages[] => {
-  const newMessages = JSON.parse(newValue!)
-  const oldMessages = JSON.parse(oldValue!)
+  const newMessages = JSON.parse(newValue || '[]')
+  const oldMessages = JSON.parse(oldValue || '[]')
   const newMessageData = <UserMessages[]>newMessages.slice(oldMessages.length, newMessages.length)
   return newMessageData
 }
