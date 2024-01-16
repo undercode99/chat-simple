@@ -1,9 +1,24 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+const message = ref('')
+const $emit = defineEmits(['onSendMessage'])
+
+const onSendMessage = () => {
+  if (!message.value) {
+    return
+  }
+  $emit('onSendMessage', message.value)
+  message.value = ''
+}
+</script>
+
 <template>
-  <div class="bg-gray-100 p-2 flex">
+  <form @submit.prevent="onSendMessage" class="bg-gray-100 p-2 flex">
     <input
       class="flex items-center h-10 w-full rounded px-3 text-sm"
       type="text"
       placeholder="Type your message…"
+      v-model="message"
     />
     <button class="ml-2 bg-primary hover:bg-blue-500 text-white font-bold py-2 px-4 rounded">
       <svg
@@ -20,5 +35,5 @@
         ></path>
       </svg>
     </button>
-  </div>
+  </form>
 </template>
